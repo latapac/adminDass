@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Machines</title>
+    <style>
+        .company-box {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            font-size: 12px;
+            text-align: center;
+            position: relative;
+            border-radius: 5px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .view-machines-btn {
+            position: absolute;
+            bottom: -65px;
+            padding: 5px;
+            font-size: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            height:55px;
+            border-radius: 3px;
+        }
+        .view-machines-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Registered Companies</h2>
+    <div class="container" id="companyList"></div>
+
+    <script>
+        function loadCompanies() {
+            const companyList = document.getElementById('companyList');
+            companyList.innerHTML = '';  // Clear previous content
+
+            const companies = JSON.parse(localStorage.getItem('companies')) || [];
+            
+            companies.forEach(company => {
+                const div = document.createElement('div');
+                div.className = 'company-box';
+                div.innerHTML = `<strong>${company.name}</strong><br>${company.id}`;
+
+                const button = document.createElement('button');
+                button.innerText = "Add Machines";
+                button.className = "add-machines-btn";
+                button.onclick = () => addMachines(company.id);
+                div.appendChild(button);
+
+                companyList.appendChild(div);
+            });
+        }
+
+        function viewMachines(companyId) {
+            alert(`Machines for Company ID: ${companyId}`);  
+            // Later, this can redirect to another page or show machines dynamically.
+        }
+
+        window.onload = loadCompanies;
+    </script>
+</body>
+</html>
