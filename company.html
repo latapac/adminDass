@@ -5,16 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Companies</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            text-align: center;
-        }
+        
         .top-bar {
             display: flex;
             justify-content: flex-end;
-            width: 80%;
-            margin: 0 auto 10px auto;
+            margin-bottom: 10px;
         }
         .add-btn {
             padding: 8px 12px;
@@ -48,7 +43,7 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        .action-btn, .machine-btn {
+        .action-btn {
             padding: 5px 10px;
             border: none;
             cursor: pointer;
@@ -94,12 +89,6 @@
         .save-btn:hover {
             background-color: #138496;
         }
-        .machine-btn {
-            background-color: #6c757d;
-        }
-        .machine-btn:hover {
-            background-color: #5a6268;
-        }
     </style>
 </head>
 <body>
@@ -116,18 +105,25 @@
                 <th>Company ID</th>
                 <th>Status</th>
                 <th>Action</th>
-                <th>Machines</th>
             </tr>
         </thead>
         <tbody id="companyTableBody"></tbody>
     </table>
 
     <script>
+        loadCompanies(); 
         function loadCompanies() {
+            console.log("heyyy");
+            
             const companyTableBody = document.getElementById('companyTableBody');
-            companyTableBody.innerHTML = '';
+            companyTableBody.innerHTML = ''; // Clear table before reloading
 
             const companies = JSON.parse(localStorage.getItem('companies')) || [];
+
+            if (companies.length === 0) {
+                companyTableBody.innerHTML = '<tr><td colspan="4">No companies registered.</td></tr>';
+                return;
+            }
 
             companies.forEach((company, index) => {
                 const row = document.createElement('tr');
@@ -144,9 +140,6 @@
                     <td>
                         <button class="action-btn ${buttonClass}" onclick="toggleCompanyStatus(${index})">${buttonText}</button>
                     </td>
-                    <td>
-                        <button class="machine-btn" onclick="addMachine('${company.company_id}')">Add Machine</button>
-                    </td>
                 `;
 
                 companyTableBody.appendChild(row);
@@ -155,8 +148,14 @@
 
         function addNewCompanyRow() {
             const companyTableBody = document.getElementById('companyTableBody');
-            const newRow = document.createElement('tr');
+            
+            // Prevent multiple input rows
+            if (document.getElementById('newCompanyName')) {
+                alert("Finish adding the current company first.");
+                return;
+            }
 
+            const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td><input type="text" id="newCompanyName" class="input-field" placeholder="Enter Company Name"></td>
                 <td>
@@ -165,7 +164,6 @@
                 </td>
                 <td>Active</td>
                 <td><button class="save-btn" onclick="saveNewCompany()">Save</button></td>
-                <td></td> 
             `;
 
             companyTableBody.appendChild(newRow);
@@ -200,12 +198,7 @@
             loadCompanies(); // Refresh the table
         }
 
-        function addMachine(companyId) {
-            alert(`Add Machine functionality for Company ID: ${companyId}`);
-            // Implement your logic here
-        }
-
-        window.onload = loadCompanies;
+        window.onload = loadCompanies; // Load stored companies when page loads
     </script>
 
 </body>

@@ -3,7 +3,7 @@ let lastTs;
 async function getLiveData() {
     
     try {
-        const response = await fetch('http://192.168.31.159:3000/getMachineData/12345');
+        const response = await fetch('http://64.227.139.217:3000/getMachineData/12345');
         console.log("l");
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -33,7 +33,7 @@ async function getLiveData() {
 
 async function fetchLiveData() {
     try {
-        const response = await fetch('http://192.168.31.159/getMachineData/12345'); // Replace with your actual API endpoint
+        const response = await fetch('http://64.227.139.217:3000/getMachineData/12345'); // Replace with your actual API endpoint
         const data = await response.json();
         
         const availability = data.availability;

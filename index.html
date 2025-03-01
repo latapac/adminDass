@@ -64,15 +64,7 @@
                     <i class="fas fa-fw fa-cog"></i>
                     <span class="companyadd">Companies</span>
                 </a>
-                <!-- <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Company:</h6>
-                        <a class="collapse-item" onclick="loadPage('view_companies.html')">View Company</a>
-                        <a class="collapse-item" onclick="loadPage('addcompany.html')">Add Company</a>
-                        <a class="collapse-item" onclick="loadPage('updatecompany.html')">Update Company</a>
-                        <a class="collapse-item" onclick="loadPage('deletecompany.html')">Delete Company</a>
-                    </div>
-                </div> -->
+               
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
@@ -689,7 +681,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Pacmac Solutions</span>
+                        <span>Copyright &copy; Your Website 2021</span>
                     </div>
                 </div>
             </footer>
@@ -728,19 +720,20 @@
 
     <!-- Bootstrap core JavaScript-->
     <script>
+
+        document.querySelector(".companyadd").addEventListener("click",()=>{
+            loadPage("company.html")
+            setInterval(loadCompanies,500)
+            loadCompanies(); 
+        })
+
         function loadPage(page) {
             fetch(page)
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("main-content").innerHTML = data;
                     
-                     if (page.includes("view_companies.html")) {
-                        loadCompanies();
-                     } else if (page.includes("addcompany.html")) {
-                            attachAddCompanyListeners();
-                    } else if (page.includes("deletecompany.html")) {
-                        loadCompaniesWithActions();
-                    }
+
                 })
                 .catch(error => {
                     console.error("Error loading page:", error);
@@ -753,7 +746,7 @@
                     generateCompanyId();
                 } else if (event.target.id === "addCompanyBtn") {
                     addCompany();
-                }
+                } 
             });
         }
         
@@ -785,7 +778,7 @@
         
             const companyData = { name: companyName, company_id: companyId, createdAt, disabled: false };
         
-            fetch('http://192.168.31.159:3000/addCompany', {
+            fetch('http://64.227.139.217:3000/getcompany/11', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(companyData)
@@ -807,70 +800,17 @@
         }
         
         function loadCompanies() {
+            console.log("index");
+            
             const companyTableBody = document.getElementById('companyTableBody');
-            if (!companyTableBody) return;
-        
-            companyTableBody.innerHTML = '';
-            const companies = JSON.parse(localStorage.getItem('companies')) || [];
-        
-            companies.forEach((company) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${company.name}</td>
-                    <td>${company.company_id}</td>
-                `;
-                companyTableBody.appendChild(row);
-            });
-        }
-        
-        function loadCompaniesWithActions() {
-            const companyTableBody = document.getElementById('companyTableBody');
-            if (!companyTableBody) return;
-    
-            companyTableBody.innerHTML = '';
-            const companies = JSON.parse(localStorage.getItem('companies')) || [];
-    
-            companies.forEach((company, index) => {
-                const row = document.createElement('tr');
-                const statusText = company.disabled ? 'Disabled' : 'Active';
-                const buttonText = company.disabled ? 'Enable' : 'Disable';
-                const buttonClass = company.disabled ? 'enable-btn' : 'disable-btn';
-                const buttonAction = company.disabled ? `enableCompany(${index})` : `disableCompany(${index})`;
-    
-                row.innerHTML = `
-                    <td>${company.name}</td>
-                    <td>${company.company_id}</td>
-                    <td id="status-${index}">${statusText}</td>
-                    <td>
-                        <button class="${buttonClass}" onclick="${buttonAction}">${buttonText}</button>
-                    </td>
-                `;
-                companyTableBody.appendChild(row);
-            });
-        }
-        
-        function disableCompany(index) {
-            let companies = JSON.parse(localStorage.getItem('companies')) || [];
-            companies[index].disabled = true;
-            localStorage.setItem('companies', JSON.stringify(companies));
-            loadCompaniesWithActions();
-        }
-        
-        function enableCompany(index) {
-            let companies = JSON.parse(localStorage.getItem('companies')) || [];
-            companies[index].disabled = false;
-            localStorage.setItem('companies', JSON.stringify(companies));
-            loadCompaniesWithActions();
-        }
-    
-        document.querySelector(".companyadd").addEventListener("click", () => {
-            loadPage("company.html");
-        });
-        function loadCompanies() {
-            const companyTableBody = document.getElementById('companyTableBody');
-            companyTableBody.innerHTML = '';
+            companyTableBody.innerHTML = ''; // Clear table before reloading
 
             const companies = JSON.parse(localStorage.getItem('companies')) || [];
+
+            if (companies.length === 0) {
+                companyTableBody.innerHTML = '<tr><td colspan="4">No companies registered.</td></tr>';
+                return;
+            }
 
             companies.forEach((company, index) => {
                 const row = document.createElement('tr');
@@ -895,8 +835,14 @@
 
         function addNewCompanyRow() {
             const companyTableBody = document.getElementById('companyTableBody');
-            const newRow = document.createElement('tr');
+            
+            // Prevent multiple input rows
+            if (document.getElementById('newCompanyName')) {
+                alert("Finish adding the current company first.");
+                return;
+            }
 
+            const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td><input type="text" id="newCompanyName" class="input-field" placeholder="Enter Company Name"></td>
                 <td>
