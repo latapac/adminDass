@@ -125,7 +125,7 @@ setInterval(fetchLiveData, 5000);
   }
   
   // Fetch data periodically (every 10 seconds)
-  setInterval(getLiveData, 10000);
+  setInterval(getLiveData, 5000);
   
   // Initial data fetch
   getLiveData();
