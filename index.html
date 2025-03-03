@@ -761,7 +761,7 @@ window.onload = function () {
         
         function generateCompanyId() {
             let now = new Date();
-            let id = `CMP-${now.getFullYear()}${now.getMonth()+1}${now.getDate()}-${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
+            let id = `CMP-${{now.getSeconds()}`;
             let companyIdField = document.getElementById('companyId');
             if (companyIdField) {
                 companyIdField.value = id;
@@ -772,6 +772,12 @@ window.onload = function () {
             window.location.href = `machine.html?companyId=${companyId}`;
     console.log("Adding machine to company ID:", companyId);
     alert(`Feature to add machine for Company ID: ${companyId} coming soon!`); 
+}
+function addUser(companyId) {
+            
+            window.location.href = `user.html?companyId=${companyId}`;
+    console.log("Adding user to company ID:", companyId);
+    alert(`Feature to add user for Company ID: ${companyId} coming soon!`); 
 }
 
         function addCompany() {
@@ -841,7 +847,9 @@ window.onload = function () {
                     <td class="status">${statusText}</td>
                     <td>
                         <button class="action-btn ${buttonClass}" onclick="toggleCompanyStatus(${index})">${buttonText}</button>
-                         <button class="action-btn machine-btn" onclick="addMachine('${company.company_id}')">Add Machine</button>
+                         <button class="action-btn machine-btn" onclick="addMachine('${company.company_id}')">View Machine</button>
+                          <button class="action-btn user-btn" style="background-color:grey;"
+                           onclick="addUser('${company.company_id}')">Add User</button>
                     </td>
                 `;
 
@@ -964,7 +972,7 @@ window.onload = function () {
 
         
 
-        function saveNewMachine() {
+        async function saveNewMachine() {
             const serialNo = document.getElementById('newMachineSerial')?.value.trim();
             const stat=document.getElementById('status')?.value === "Active" ? true : false;
             const companyId = document.getElementById('companyIdInput')?.value.trim();
@@ -976,7 +984,7 @@ window.onload = function () {
                 return;
             }
 
-            fetch('http://64.227.139.217:3000/addMachine/', {
+            await fetch('http://64.227.139.217:3000/addMachine/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1004,6 +1012,118 @@ window.onload = function () {
         }
 
         window.onload = loadMachines;
+        function loadUsers() {
+            const userTableBody = document.getElementById('userTableBody');
+            userTableBody.innerHTML = ''; 
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            if (users.length === 0) {
+                userTableBody.innerHTML = '<tr><td colspan="8">No users registered.</td></tr>';
+                return;
+            }
+
+            users.forEach((user, index) => {
+                const row = document.createElement('tr');
+
+                const statusText = user.disabled ? 'Disabled' : 'Active';
+                const buttonText = user.disabled ? 'Enable' : 'Disable';
+                const buttonClass = user.disabled ? 'enable-btn' : 'disable-btn';
+
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.password}</td>
+                    <td>${user.name || '-'}</td>
+                    <td>${user.email || '-'}</td>
+                    <td>${user.companyId || '-'}</td>
+                    <td>${statusText}</td>
+                    <td>${user.role || '-'}</td>
+                    <td>
+                        <button class="action-btn ${buttonClass}" onclick="toggleUserStatus(${index})">${buttonText}</button>
+                    </td>
+                `;
+
+                userTableBody.appendChild(row);
+            });
+        }
+
+        function addNewUserRow() {
+            const userTableBody = document.getElementById('userTableBody');
+
+            if (document.getElementById('newUsername')) {
+                alert("Finish adding the current user first.");
+                return;
+            }
+
+            // Get companyId from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const companyId = urlParams.get('companyId') || '';
+
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" id="newUsername" class="input-field" placeholder="Enter Username"></td>
+                <td><input type="password" id="newPassword" class="input-field" placeholder="Password"></td>
+                <td><input type="text" id="newName" class="input-field" placeholder="Name"></td>
+                <td><input type="email" id="newEmail" class="input-field" placeholder="Email"></td>
+                <td><input type="text" id="companyIdInput" class="input-field" value="${companyId}" readonly></td>
+                <td>Active</td>
+                <td><input type="text" id="newRole" class="input-field" placeholder="Role"></td>
+                <td><button class="save-btn" onclick="saveNewUser()">Save</button></td>
+            `;
+
+            userTableBody.appendChild(newRow);
+        }
+
+        async function saveNewUser() {
+            console.log("fun");
+            
+            const username = document.getElementById('newUsername')?.value.trim();
+            const password = document.getElementById('newPassword')?.value.trim();
+            const name = document.getElementById('newName')?.value.trim();
+            const email = document.getElementById('newEmail')?.value.trim();
+            const companyId = document.getElementById('companyIdInput')?.value.trim();
+            const role = document.getElementById('newRole')?.value.trim();
+
+            if (!username || !password) {
+                alert("Please enter user details");
+                return;
+            }
+            try {
+                
+               const res = await fetch('http://64.227.139.217:3000/signup/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        company_id:companyId,
+                        username:username,
+                        password:password,
+                        name:name,
+                        email:email,
+                        status:stat,
+    
+                    })
+                })
+               
+                
+            } catch (error) {
+                console.log("add");
+                
+            }
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.push({ username, password, name, email, companyId, role, disabled: false });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            loadUsers();
+        }
+
+        function toggleUserStatus(index) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            users[index].disabled = !users[index].disabled;
+            localStorage.setItem('users', JSON.stringify(users));
+            loadUsers();
+        }
+
+        window.onload = loadUsers;
     </script>
     
      <script src="script.js"></script>

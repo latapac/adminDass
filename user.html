@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Companies</title>
+    <title>Add User</title>
     <style>
         .top-bar {
             display: flex;
@@ -22,7 +22,7 @@
             background-color: #0056b3;
         }
         table {
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
             border-collapse: collapse;
             background: white;
@@ -62,22 +62,6 @@
         .enable-btn:hover {
             background-color: #218838;
         }
-        .machine-btn {
-            background-color: #17a2b8;
-        }
-        .machine-btn:hover {
-            background-color: #138496;
-        }
-        .generate-id-btn {
-            padding: 5px 10px;
-            background-color: #ffc107;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .generate-id-btn:hover {
-            background-color: #e0a800;
-        }
         .input-field {
             padding: 5px;
             border: 1px solid #ccc;
@@ -87,7 +71,7 @@
         .save-btn {
             padding: 5px 10px;
             background-color: #17a2b8;
-            color: white;
+            color: rgb(255, 255, 255);
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -100,24 +84,26 @@
 <body>
 
     <div class="top-bar">
-        <button class="add-btn" onclick="addNewCompanyRow()">Add Company</button>
+        <button class="add-btn" onclick="addNewUserRow()">Add User</button>
     </div>
 
-    <h2>Registered Companies</h2>
     <table>
         <thead>
             <tr>
-                <th>Company Name</th>
-                <th>Company ID</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Company Id</th>
                 <th>Status</th>
+                <th>Role</th>
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody id="companyTableBody"></tbody>
+        <tbody id="userTableBody"></tbody>
     </table>
 
-    <script src="company.js">
-    </script>
+    <script src="user.js"></script>
 
 </body>
 </html>
