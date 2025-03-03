@@ -4,15 +4,12 @@ async function getLiveData() {
     
     try {
         const response = await fetch('http://64.227.139.217:3000/getMachineData/12345');
-        console.log("l");
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const data = await response.json(); 
-        console.log(data);
+        const data = await response.json();
         
       
-        console.log("Fetched Data:", data.data[1].ts,lastTs);
          if(lastTs===data.data[1].ts){
             console.log("no update");
             return
@@ -31,22 +28,9 @@ async function getLiveData() {
   // Initialize Chart.js Pie Chart
   let oeeChart;
 
-async function fetchLiveData() {
-    try {
-        const response = await fetch('http://64.227.139.217:3000/getMachineData/12345'); // Replace with your actual API endpoint
-        const data = await response.json();
-        
-        const availability = data.availability;
-        const performance = data.performance;
-        const quality = data.quality;
-
-        updatePieChart(availability, performance, quality);
-    } catch (error) {
-        console.error("Error fetching OEE data:", error);
-    }
-}
-
-function updatePieChart(availability, performance, quality) {
+  function updateDonutChart(availability, performance, quality) {
+    console.log(availability);
+    
     const ctx = document.getElementById('myPieChart').getContext('2d');
 
     if (oeeChart) {
@@ -54,7 +38,7 @@ function updatePieChart(availability, performance, quality) {
     }
 
     oeeChart = new Chart(ctx, {
-        type: 'pie',
+        type: 'doughnut', // Change 'pie' to 'doughnut'
         data: {
             labels: ['Availability', 'Performance', 'Quality'],
             datasets: [{
@@ -77,19 +61,19 @@ function updatePieChart(availability, performance, quality) {
                         }
                     }
                 }
-            }
+            },
+            cutoutPercentage: 80,//Optional: Set the size of the donut hole (50% is typical)
         }
     });
 }
 
+
 // Fetch live data every 5 seconds
-fetchLiveData();
-setInterval(fetchLiveData, 5000);
+
 
   
   // Function to update page content with live data
   function updatePage(data) {
-    console.log(data);
     
     if (!data || typeof data !== 'object') {
         console.error("Invalid data format:", data);
@@ -107,7 +91,9 @@ setInterval(fetchLiveData, 5000);
     const qual = data?.d["qual"]?.[0] ?? 1;
     const perf = data?.d["perf"]?.[0] ?? 1;
   
-    console.log("Updated Data:", { oee, runtime, stoptime, errortime, totalprd, goodprod, rejprod });
+    console.log("heyy");
+    updateDonutChart(aval, perf, qual);
+   
   
     document.getElementById('total_production').innerText = `${totalprd}`;
     document.getElementById('good_production').innerText = `${goodprod}`;
@@ -121,7 +107,6 @@ setInterval(fetchLiveData, 5000);
     document.getElementById('perf').innerText = `${perf.toFixed(1)}%`;
     document.getElementById('qual').innerText = `${qual.toFixed(1)}%`;
   
-    createPieChart(aval, perf, qual);
   }
   
   // Fetch data periodically (every 10 seconds)
