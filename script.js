@@ -34,7 +34,7 @@ async function getLiveData() {
     const ctx = document.getElementById('myPieChart').getContext('2d');
 
     if (oeeChart) {
-        oeeChart.destroy(); // Destroy previous chart before creating a new one
+        oeeChart.destroy();
     }
 
     oeeChart = new Chart(ctx, {
@@ -48,7 +48,7 @@ async function getLiveData() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             plugins: {
                 legend: {
                     display: true,
@@ -110,7 +110,7 @@ async function getLiveData() {
   }
   
   // Fetch data periodically (every 10 seconds)
-  setInterval(getLiveData, 10000);
+  setInterval(getLiveData, 5000);
   
   // Initial data fetch
   getLiveData();
