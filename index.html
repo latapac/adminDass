@@ -19,10 +19,25 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  
 
 </head>
 
 <body id="page-top">
+
+    <script>
+      function checkLogin() {
+            const username = localStorage.getItem("username")
+            if (username) {
+                return true
+            } else {
+                return false
+            }
+        }
+        if (!checkLogin()) {
+            window.location.href = "/adminDass/login.html"
+        }
+    </script>
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -36,7 +51,6 @@
                     <!--logo-->
                 </div>
                 <img src="img/logo.png" alt="" style="height: 39px;">
-
             </a>
 
             <!-- Divider -->
@@ -64,7 +78,7 @@
                     <i class="fas fa-fw fa-cog"></i>
                     <span class="companyadd">Companies</span>
                 </a>
-               
+
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
@@ -77,10 +91,10 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        
+
                         <a class="collapse-item" href="view_machines.html">View Machines</a>
                         <a class="collapse-item" href="add_machines.html">Add Machines</a>
-                        
+
                     </div>
                 </div>
             </li>
@@ -136,7 +150,7 @@
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
-            
+
             <!-- Sidebar Message 
             <div class="sidebar-card d-none d-lg-flex">
                 <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
@@ -161,7 +175,7 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                
+
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -255,8 +269,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -267,8 +280,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -279,8 +291,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -311,9 +322,9 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Dabur India Ltd (Silvassa Unit)</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Dabur India Ltd (Silvassa
+                                    Unit)</span>
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -331,7 +342,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item logout"  >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -363,7 +374,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Total Production</div>
-                                            <div id="total_production" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                            <div id="total_production" class="h5 mb-0 font-weight-bold text-gray-800">
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -381,7 +393,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Good Production</div>
-                                            <div id="good_production" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                            <div id="good_production" class="h5 mb-0 font-weight-bold text-gray-800">
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -397,16 +410,18 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Bad Production
-                                            <span></span></div> 
-                                            <div class="row no-gutters align-items-center"  >
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Bad
+                                                Production
+                                                <span></span>
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" 
-                                                    id="bad_production"></div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
+                                                        id="bad_production"></div>
                                                 </div>
                                                 <div class="col">
                                                     <!-- <div class="progress progress-sm mr-2"> -->
-                                                        <!-- <div class="progress-bar bg-info" role="progressbar"
+                                                    <!-- <div class="progress-bar bg-info" role="progressbar"
                                                             style="width: 50%" aria-valuenow="50" aria-valuemin="0"
                                                             aria-valuemax="100"></div> -->
                                                     <!-- </div> -->
@@ -429,7 +444,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Total companies</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total_companies"></div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total_companies">
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -530,32 +546,29 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
                                 </div>
                                 <div class="card-body">
-                                    <h4 class="small font-weight-bold">Runtime<span
-                                         class="float-right"></span></h4>
+                                    <h4 class="small font-weight-bold">Runtime<span class="float-right"></span></h4>
                                     <div class="progress mb-4">
                                         <div class="progress-bar bg-danger" role="progressbar" id="runtime"
                                             aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <h4 class="small font-weight-bold">Stoptime<span
-                                            class="float-right"></span></h4>
+                                    <h4 class="small font-weight-bold">Stoptime<span class="float-right"></span></h4>
                                     <div class="progress mb-4">
                                         <div class="progress-bar bg-warning" role="progressbar" id="stoptime"
                                             aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <h4 class="small font-weight-bold">Errortime<span
-                                            class="float-right"></span></h4>
+                                    <h4 class="small font-weight-bold">Errortime<span class="float-right"></span></h4>
                                     <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" id="errortime"
-                                            aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" id="errortime" aria-valuenow=""
+                                            aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <h4 class="small font-weight-bold">Failure losstime<span
-                                        id="failure_loss_time"  class="float-right"></span></h4>
+                                    <h4 class="small font-weight-bold">Failure losstime<span id="failure_loss_time"
+                                            class="float-right"></span></h4>
                                     <div class="progress mb-4">
                                         <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
                                             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <h4 class="small font-weight-bold">Minor stoppage time<span
-                                        id="minor_stoppage_time"    class="float-right"></span></h4>
+                                    <h4 class="small font-weight-bold">Minor stoppage time<span id="minor_stoppage_time"
+                                            class="float-right"></span></h4>
                                     <div class="progress">
                                         <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
                                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -697,111 +710,98 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
     <script>
 
-        document.querySelector(".companyadd").addEventListener("click",()=>{
+        document.querySelector(".companyadd").addEventListener("click", () => {
             loadPage("company.html")
-            setInterval(loadCompanies,500)
-            loadCompanies(); 
+            setInterval(loadCompanies, 500)
+            loadCompanies();
         })
+
+        document.querySelector(".logout").addEventListener("click",()=>{
+            localStorage.clear("username")
+            localStorage.clear("password")
+            window.location.href = "/adminDass/login.html"
+        })             
+
+       
 
         function loadPage(page) {
             fetch(page)
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("main-content").innerHTML = data;
-                    
+
 
                 })
                 .catch(error => {
                     console.error("Error loading page:", error);
                 });
         }
-        
+
         function attachAddCompanyListeners() {
-            document.querySelector("#main-content").addEventListener("click", function(event) {
+            document.querySelector("#main-content").addEventListener("click", function (event) {
                 if (event.target.id === "generateCompanyIdBtn") {
                     generateCompanyId();
                 } else if (event.target.id === "addCompanyBtn") {
                     addCompany();
-                } 
+                }
             });
         }
-        
+
         function generateCompanyId() {
             let now = new Date();
-            let id = `CMP-${now.getFullYear()}${now.getMonth()+1}${now.getDate()}-${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
+            let id = `CMP-${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}-${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
             let companyIdField = document.getElementById('companyId');
             if (companyIdField) {
                 companyIdField.value = id;
             }
         }
-        
+
         function addCompany() {
             const companyName = document.getElementById('companyName')?.value;
             const companyId = document.getElementById('companyId')?.value;
-        
+
             if (!companyName || !companyId) {
                 alert("Please enter a company name and generate an ID!");
                 return;
             }
-        
+
             let now = new Date();
             let createdAt = now.getFullYear() + "-" +
-                            String(now.getMonth() + 1).padStart(2, '0') + "-" +
-                            String(now.getDate()).padStart(2, '0') + " " +
-                            String(now.getHours()).padStart(2, '0') + ":" +
-                            String(now.getMinutes()).padStart(2, '0') + ":" +
-                            String(now.getSeconds()).padStart(2, '0');
-        
+                String(now.getMonth() + 1).padStart(2, '0') + "-" +
+                String(now.getDate()).padStart(2, '0') + " " +
+                String(now.getHours()).padStart(2, '0') + ":" +
+                String(now.getMinutes()).padStart(2, '0') + ":" +
+                String(now.getSeconds()).padStart(2, '0');
+
             const companyData = { name: companyName, company_id: companyId, createdAt, disabled: false };
-        
+
             fetch('http://64.227.139.217:3000/getcompany/11', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(companyData)
             })
-            .then(response => response.json())
-            .then(data => {
-                alert("Company added successfully!");
-        
-                let companies = JSON.parse(localStorage.getItem('companies')) || [];
-                companies.push(companyData);
-                localStorage.setItem('companies', JSON.stringify(companies));
-        
-                loadPage("view_companies.html");
-            })
-            .catch(error => {
-                alert("Error adding company.");
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    alert("Company added successfully!");
+
+                    let companies = JSON.parse(localStorage.getItem('companies')) || [];
+                    companies.push(companyData);
+                    localStorage.setItem('companies', JSON.stringify(companies));
+
+                    loadPage("view_companies.html");
+                })
+                .catch(error => {
+                    alert("Error adding company.");
+                    console.error('Error:', error);
+                });
         }
-        
+
         function loadCompanies() {
-            console.log("index");
-            
+           
+
             const companyTableBody = document.getElementById('companyTableBody');
             companyTableBody.innerHTML = ''; // Clear table before reloading
 
@@ -835,7 +835,7 @@
 
         function addNewCompanyRow() {
             const companyTableBody = document.getElementById('companyTableBody');
-            
+
             // Prevent multiple input rows
             if (document.getElementById('newCompanyName')) {
                 alert("Finish adding the current company first.");
@@ -858,7 +858,7 @@
 
         function generateCompanyId() {
             let now = new Date();
-            let id = `CMP-${now.getFullYear()}${now.getMonth()+1}${now.getDate()}-${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
+            let id = `CMP-${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}-${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`;
             document.getElementById('newCompanyId').value = id;
         }
 
@@ -887,9 +887,9 @@
 
         window.onload = loadCompanies;
     </script>
-    
-     <script src="script.js"></script>
-    
+
+    <script src="script.js"></script>
+
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -904,7 +904,7 @@
 
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <!-- <script src="js/demo/chart-pie-demo.js"></script> -->
 
 </body>
 
