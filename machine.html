@@ -181,13 +181,13 @@
             const purchaseDate = document.getElementById('purchaseDate')?.value;
             const activationDate = document.getElementById('activationDate')?.value;
 
-            if (!serialNo || !machineId || !companyId) {
+            if (!serialNo || !companyId) {
                 alert("Please enter machine details and generate an ID!");
                 return;
             }
 
             const machines = JSON.parse(localStorage.getItem('machines')) || [];
-            machines.push({ serialNo, machineId, companyId, purchaseDate, activationDate, disabled: false });
+            machines.push({ serialNo, companyId, purchaseDate, activationDate, disabled: false });
             localStorage.setItem('machines', JSON.stringify(machines));
 
             loadMachines();

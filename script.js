@@ -50,7 +50,7 @@ function updatePieChart(availability, performance, quality) {
     const ctx = document.getElementById('myPieChart').getContext('2d');
 
     if (oeeChart) {
-        oeeChart.destroy(); // Destroy previous chart before creating a new one
+        oeeChart.destroy();
     }
 
     oeeChart = new Chart(ctx, {
@@ -64,7 +64,7 @@ function updatePieChart(availability, performance, quality) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             plugins: {
                 legend: {
                     display: true,

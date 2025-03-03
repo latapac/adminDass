@@ -35,7 +35,7 @@
                 <div class="sidebar-brand-icon ">
                     <!--logo-->
                 </div>
-                <img src="img/logo.png" alt="" style="height: 39px;">
+                <img src="img/logo.png" alt="" style="max-width: 100%;height: auto;">
 
             </a>
 
@@ -954,7 +954,7 @@ window.onload = function () {
         <td><input type="text" id="companyIdInput" class="input-field" value="${companyId}" readonly></td>
         <td><input type="date" id="purchaseDate" class="input-field"></td>
         <td><input type="date" id="activationDate" class="input-field"></td>
-        <td>Active</td>
+        <td id="status">Active</td>
         <td><button class="save-btn" onclick="saveNewMachine()">Save</button></td>
     `;
 
@@ -966,7 +966,7 @@ window.onload = function () {
 
         function saveNewMachine() {
             const serialNo = document.getElementById('newMachineSerial')?.value.trim();
-            
+            const stat=document.getElementById('status')?.value === "Active" ? true : false;
             const companyId = document.getElementById('companyIdInput')?.value.trim();
             const purchaseDate = document.getElementById('purchaseDate')?.value;
             const activationDate = document.getElementById('activationDate')?.value;
@@ -975,6 +975,19 @@ window.onload = function () {
                 alert("Please enter machine details and generate an ID!");
                 return;
             }
+
+            fetch('http://64.227.139.217:3000/addMachine/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    company_id:companyId,
+                    serial_number:serialNo,
+                    purchase_date:purchaseDate,
+                    activation_date:activationDate,
+                    status:stat,
+
+                })
+            })
 
             const machines = JSON.parse(localStorage.getItem('machines')) || [];
             machines.push({ serialNo, machineId, companyId, purchaseDate, activationDate, disabled: false });
