@@ -62,7 +62,7 @@ async function getLiveData() {
                     }
                 }
             },
-            cutoutPercentage: 70, // Optional: Set the size of the donut hole (50% is typical)
+            cutoutPercentage: 80,//Optional: Set the size of the donut hole (50% is typical)
         }
     });
 }
