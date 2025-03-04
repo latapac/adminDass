@@ -174,7 +174,7 @@
 
         
 
-        function saveNewMachine() {
+       async function saveNewMachine() {
             const serialNo = document.getElementById('newMachineSerial')?.value.trim();
             
             const companyId = document.getElementById('companyIdInput')?.value.trim();
@@ -185,7 +185,26 @@
                 alert("Please enter machine details and generate an ID!");
                 return;
             }
-
+            try {
+                
+                const res = await fetch('http://64.227.139.217:3000/addMachine/', {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify({
+                        company_id:companyId,
+                        serial_number:serialNo,
+                        purchase_date:purchaseDate,
+                        activation_date:activationDate,
+                        status:stat,
+                     })
+                 })
+                console.log(res);
+                
+                 
+             } catch (error) {
+                 console.log(error);
+                 
+             }
             const machines = JSON.parse(localStorage.getItem('machines')) || [];
             machines.push({ serialNo, companyId, purchaseDate, activationDate, disabled: false });
             localStorage.setItem('machines', JSON.stringify(machines));

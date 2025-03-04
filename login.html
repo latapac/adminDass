@@ -45,22 +45,22 @@
             padding: 0;
         }
     </style>
-     <script>
+    <script>
         function checkLogin() {
-              const username = localStorage.getItem("username")
-  
-              if (username) {
-                  return true
-              } else {
-                  return false
-              }
-          }
-  
-          if (checkLogin()) {
-              window.location.href = "/adminDass/index.html"
-          }
-  
-      </script>
+            const username = localStorage.getItem("username")
+
+            if (username) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        if (checkLogin()) {
+            window.location.href = "index.html"
+        }
+
+    </script>
 </head>
 
 <body class="bg-gradient-primary">
@@ -79,8 +79,7 @@
                         <form class="user">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user" name="username"
-                                   placeholder="Enter Username..." required
-                                    style="width: 15vw;">
+                                    placeholder="Enter Username..." required style="width: 15vw;">
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control form-control-user" name="password"
@@ -106,35 +105,41 @@
             const password = data.get("password");
 
             try {
-                loginUser(username,password)
+                loginUser(username, password)
             } catch (error) {
                 console.log(error);
             }
 
 
             async function loginUser(username, password) {
-                const data = await fetch("http://64.227.139.217:3000/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json", // specify the content type
-                    },
-                    body: JSON.stringify({
-                        username,
-                        password
-                    }),
-                })
-                const jsonData = await data.json()
-                if (jsonData?.status === true) {
-                    localStorage.setItem("username", jsonData.username)
-                    localStorage.setItem("password", jsonData.password)
-                    window.location.href = "index.html"
-                } else if (jsonData?.status === 400) {
-                   alert("incorrect password");
-                } else if (jsonData?.status === 404) {
-                    alert("no user found");
-                } else {
-                    alert("invalid serer response");
+                try {
+                    const data = await fetch("http://192.168.31.159:3000/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json", // specify the content type
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password
+                        }),
+                    })
+                    const jsonData = await data.json()
+                    if (jsonData?.status === true) {
+                        localStorage.setItem("username", jsonData.username)
+                        localStorage.setItem("password", jsonData.password)
+                        window.location.href = "index.html"
+                    } else if (jsonData?.status === 400) {
+                        alert("incorrect password");
+                    } else if (jsonData?.status === 404) {
+                        alert("no user found");
+                    } else {
+                        alert("invalid serer response");
+                    }
+                } catch (error) {
+                    alert(error);
+                    
                 }
+
             }
         })
     </script>
