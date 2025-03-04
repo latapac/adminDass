@@ -9,7 +9,6 @@ async function getLiveData() {
         }
         const data = await response.json();
         
-      
          if(lastTs===data.data[1].ts){
             console.log("no update");
             return
@@ -29,7 +28,7 @@ async function getLiveData() {
   let oeeChart;
 
   function updateDonutChart(availability, performance, quality) {
-    console.log(availability);
+  
     
     const ctx = document.getElementById('myPieChart').getContext('2d');
 
@@ -60,9 +59,24 @@ async function getLiveData() {
                             return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}%`; // Show percentage with label
                         }
                     }
+                },
+                // Custom plugin to draw text in the middle of the donut
+                datalabels: {
+                    formatter: function(value, ctx) {
+                        let total = ctx.chart._metasets[0].data.reduce((acc, cur) => acc + cur, 0);
+                        let percent = ((value / total) * 100).toFixed(2) + '%';
+                        return percent;
+                    },
+                    color: '#000', // Color of the text
+                    font: {
+                        size: 16, // Size of the font in the center
+                        weight: 'bold'
+                    },
+                    align: 'center',
+                    anchor: 'center'
                 }
             },
-            cutoutPercentage: 80,//Optional: Set the size of the donut hole (50% is typical)
+            cutoutPercentage: 80, // Set the size of the donut hole (adjust to your preference)
         }
     });
 }
@@ -91,7 +105,6 @@ async function getLiveData() {
     const qual = data?.d["qual"]?.[0] ?? 1;
     const perf = data?.d["perf"]?.[0] ?? 1;
   
-    console.log("heyy");
     updateDonutChart(aval, perf, qual);
    
   
