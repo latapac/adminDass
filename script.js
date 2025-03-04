@@ -24,62 +24,68 @@ async function getLiveData() {
     }
   }
   
-  // Initialize Chart.js Pie Chart
   let oeeChart;
 
-  function updateDonutChart(availability, performance, quality) {
+
+  function updateDonutChart(availability, performance, quality,oee) {
+      const ctx = document.getElementById('myPieChart').getContext('2d');
   
-    
-    const ctx = document.getElementById('myPieChart').getContext('2d');
-
-    if (oeeChart) {
-        oeeChart.destroy();
-    }
-
-    oeeChart = new Chart(ctx, {
-        type: 'doughnut', // Change 'pie' to 'doughnut'
-        data: {
-            labels: ['Availability', 'Performance', 'Quality'],
-            datasets: [{
-                data: [availability, performance, quality],
-                backgroundColor: ['#17A2B8', '#28A745', '#FFC107'],
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}%`; // Show percentage with label
-                        }
-                    }
-                },
-                // Custom plugin to draw text in the middle of the donut
-                datalabels: {
-                    formatter: function(value, ctx) {
-                        let total = ctx.chart._metasets[0].data.reduce((acc, cur) => acc + cur, 0);
-                        let percent = ((value / total) * 100).toFixed(2) + '%';
-                        return percent;
-                    },
-                    color: '#000', // Color of the text
-                    font: {
-                        size: 16, // Size of the font in the center
-                        weight: 'bold'
-                    },
-                    align: 'center',
-                    anchor: 'center'
-                }
-            },
-            cutoutPercentage: 80, // Set the size of the donut hole (adjust to your preference)
-        }
-    });
-}
+      if (oeeChart) {
+          oeeChart.destroy();
+      }
+  
+      oeeChart = new Chart(ctx, {
+          type: 'doughnut', // Doughnut chart
+          data: {
+              labels: ['Availability', 'Performance', 'Quality'],
+              datasets: [{
+                  data: [availability, performance, quality],
+                  backgroundColor: ['#17A2B8', '#28A745', '#FFC107'],
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false, // Allow chart to resize freely
+              plugins: {
+                  legend: {
+                      display: true,
+                      position: 'bottom'
+                  },
+                  tooltip: {
+                      callbacks: {
+                          label: function(tooltipItem) {
+                              return `${tooltipItem.label}: ${tooltipItem.raw.toFixed(2)}%`; // Show percentage with label
+                          }
+                      }
+                  }
+              },
+              cutoutPercentage: 80, // Set donut hole size
+          },
+          plugins: [{
+              // Draw "OEE" text in the center after drawing the chart
+              beforeDraw: function(chart) {
+                  const ctx = chart.ctx;
+                  const width = chart.width;
+                  const height = chart.height;
+  
+                  // Dynamically calculate font size based on chart's height and width
+                  const fontSize = Math.min(width, height) / 10; // Makes text responsive
+                  ctx.font = fontSize + "px sans-serif"; // Apply calculated font size
+                  ctx.textBaseline = "middle";
+                  ctx.fillStyle = "#000"; // Text color
+  
+                  const text = "OEE:" + oee.toFixed(2) +"%";
+                  const textX = Math.round((width - ctx.measureText(text).width) / 2); // Center text horizontally
+                  const textY = height / 2; // Center text vertically
+  
+                  ctx.fillText(text, textX, textY);
+              }
+          }]
+      });
+  }
+  
+  
+  
 
 
 // Fetch live data every 5 seconds
@@ -105,7 +111,7 @@ async function getLiveData() {
     const qual = data?.d["qual"]?.[0] ?? 1;
     const perf = data?.d["perf"]?.[0] ?? 1;
   
-    updateDonutChart(aval, perf, qual);
+    updateDonutChart(aval, perf, qual,oee);
    
   
     document.getElementById('total_production').innerText = `${totalprd}`;

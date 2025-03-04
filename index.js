@@ -12,12 +12,12 @@ window.onload = function () {
 
 document.querySelector(".companyadd").addEventListener("click", () => {
     loadPage("company.html")
-    setTimeout(loadCompanies,500)
-   
+    setTimeout(loadCompanies, 500)
+
 })
 document.querySelector(".machineadd").addEventListener("click", () => {
     loadPage("machine.html")
-    setTimeout(loadMachines,500)
+    setTimeout(loadMachines, 500)
 })
 
 function loadPage(page) {
@@ -56,13 +56,13 @@ function addMachine(companyId) {
 
     window.location.href = `machine.html?companyId = ${companyId}`;
     console.log("Adding machine to company ID:", companyId);
-  
+
 }
 function addUser(companyId) {
 
     window.location.href = `user.html?companyId=${companyId} `;
     console.log("Adding user to company ID:", companyId);
-  
+
 }
 
 function addCompany() {
@@ -105,42 +105,56 @@ function addCompany() {
         });
 }
 
-function loadCompanies() {
+async function loadCompanies() {
+    try {
+        // Fetch data from the API
+        const response = await fetch("http://64.227.139.217:3000/getAllCompany");
+        const data = await response.json();
+        
+        // Get the table body element to populate with company data
+        const companyTableBody = document.querySelector("#companyTableBody");  // Assuming this is the correct table body element
+        
+        companyTableBody.innerHTML = ''; // Clear table before reloading
 
+        const companies = data.data || []; // Use the data fetched from API
 
-    const companyTableBody = document.getElementById('companyTableBody');
-    companyTableBody.innerHTML = ''; // Clear table before reloading
+        if (companies.length === 0) {
+            companyTableBody.innerHTML = '<tr><td colspan="4">No companies registered.</td></tr>';
+            return;
+        }
 
-    const companies = JSON.parse(localStorage.getItem('companies')) || [];
+        companies.forEach((company, index) => {
+            const row = document.createElement('tr');
+            row.dataset.index = index;
 
-    if (companies.length === 0) {
-        companyTableBody.innerHTML = '<tr><td colspan="4">No companies registered.</td></tr>';
-        return;
+            const statusText = company.disabled ? 'Disabled' : 'Active';
+            const buttonText = company.disabled ? 'Enable' : 'Disable';
+            const buttonClass = company.disabled ? 'enable-btn' : 'disable-btn';
+
+            row.innerHTML = `
+                <td>${company.name}</td>
+                <td>${company.company_id}</td>
+                <td class="status">${statusText}</td>
+                <td>
+                    <button class="action-btn ${buttonClass}" onclick="toggleCompanyStatus(${index})">${buttonText}</button>
+                    <button class="action-btn machine-btn" onclick="addMachine('${company.company_id}')">View Machine</button>
+                    <button class="action-btn user-btn" style="background-color:grey;" onclick="addUser('${company.company_id}')">Add User</button>
+                </td>
+            `;
+
+            companyTableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.log('Error fetching companies:', error);
     }
-
-    companies.forEach((company, index) => {
-        const row = document.createElement('tr');
-        row.dataset.index = index;
-
-        const statusText = company.disabled ? 'Disabled' : 'Active';
-        const buttonText = company.disabled ? 'Enable' : 'Disable';
-        const buttonClass = company.disabled ? 'enable-btn' : 'disable-btn';
-
-        row.innerHTML = `
-        <td> ${company.name}</td>
-            <td>${company.company_id}</td>
-            <td class="status">${statusText}</td>
-            <td>
-                <button class="action-btn ${buttonClass}" onclick="toggleCompanyStatus(${index})">${buttonText}</button>
-                 <button class="action-btn machine-btn" onclick="addMachine('${company.company_id}')">View Machine</button>
-                  <button class="action-btn user-btn" style="background-color:grey;"
-                   onclick="addUser('${company.company_id}')">Add User</button>
-            </td>
-    `;
-
-        companyTableBody.appendChild(row);
-    });
 }
+
+// Example: Adding event listener for your "companyadd" button
+document.querySelector(".companyadd").addEventListener("click", () => {
+    loadPage("company.html");
+    setTimeout(loadCompanies, 500);
+});
+
 
 function addNewCompanyRow() {
     const companyTableBody = document.getElementById('companyTableBody');
@@ -187,7 +201,7 @@ async function saveNewCompany() {
     });
 
     console.log(await res.json());
-    
+
 
     loadCompanies(); // Refresh table with new company added
 }
@@ -204,7 +218,7 @@ function loadMachines() {
     const machineTableBody = document.getElementById('machineTableBody');
     machineTableBody.innerHTML = '';
 
-    const machines = JSON.parse(localStorage.getItem('machines')) || [];
+    const machines = fetch("http://64.227.139.217:3000/getMachine")
 
     if (machines.length === 0) {
         machineTableBody.innerHTML = '<tr><td colspan="7">No machines registered.</td></tr>';
