@@ -73,6 +73,7 @@ async function getLiveData() {
                   ctx.font = fontSize + "px sans-serif"; // Apply calculated font size
                   ctx.textBaseline = "middle";
                   ctx.fillStyle = "#000"; // Text color
+                  ctx.textBaseline = "middle"
   
                   const text = "OEE:" + oee.toFixed(2) +"%";
                   const textX = Math.round((width - ctx.measureText(text).width) / 2); // Center text horizontally

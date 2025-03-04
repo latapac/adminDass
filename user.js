@@ -1,8 +1,17 @@
-function loadUsers() {
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+
+const companyId = urlParams.get("companyId")
+
+async function loadUsers() {
     const userTableBody = document.getElementById('userTableBody');
     userTableBody.innerHTML = ''; 
 
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const result = await fetch("http://64.227.139.217:3000/getAllUsers/"+companyId)
+
+    const data = await result.json()
+
+    const users = data.data
 
     if (users.length === 0) {
         userTableBody.innerHTML = '<tr><td colspan="8">No users registered.</td></tr>';
@@ -21,7 +30,7 @@ function loadUsers() {
             <td>${user.password}</td>
             <td>${user.name || '-'}</td>
             <td>${user.email || '-'}</td>
-            <td>${user.companyId || '-'}</td>
+            <td>${user.c_id || '-'}</td>
             <td>${statusText}</td>
             <td>${user.role || '-'}</td>
             <td>
@@ -41,9 +50,11 @@ function addNewUserRow() {
         return;
     }
 
-    // Get companyId from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const companyId = urlParams.get('companyId') || '';
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    
+    const companyId = urlParams.get("companyId")
+   
 
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
@@ -61,7 +72,8 @@ function addNewUserRow() {
 }
 
 async function saveNewUser() {
-    console.log("Saving user...");
+   console.log("runnin");
+   
 
     const username = document.getElementById('newUsername')?.value.trim();
     const password = document.getElementById('newPassword')?.value.trim();
@@ -76,7 +88,7 @@ async function saveNewUser() {
     }
 
     try {
-        const res = await fetch('http://64.227.139.217:3000/signup', {
+        fetch('http://64.227.139.217:3000/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -88,25 +100,20 @@ async function saveNewUser() {
                 status: true,
                 role: role
             })
+        })
+        .then(res => {
+            if (!res.status) {
+                throw new Error('Signup failed: ' + res.statusText);
+            }
+            return res.json();
+        })
+        .then(() => loadUsers())
+        .catch(error => {
+            console.error('Error:', error);
+            // Optionally show an alert or feedback to the user
         });
-
-        // ✅ Extract JSON data from the response
-        const data = await res.json();
-        console.log("Server Response:", data);
-
-        if (res.ok) {
-            alert("User registered successfully!");
-
-            // Save to localStorage
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            users.push({ username, password, name, email, companyId, role, disabled: false });
-            localStorage.setItem('users', JSON.stringify(users));
-
-            // Reload user list
-            loadUsers();
-        } else {
-            alert("Error: " + (data.message || "Something went wrong"));
-        }
+        
+       
     } catch (error) {
         console.error("Fetch error:", error);
         alert("Failed to save user. Please check your connection.");

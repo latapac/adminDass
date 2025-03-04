@@ -16,8 +16,8 @@ document.querySelector(".companyadd").addEventListener("click", () => {
 
 })
 document.querySelector(".machineadd").addEventListener("click", () => {
-    loadPage("machine.html")
-    setTimeout(loadMachines, 500)
+    window.location.href = `machine.html?companyId=${companyId} `;
+    console.log("Adding user to company ID:", companyId);
 })
 
 function loadPage(page) {
@@ -53,10 +53,8 @@ function generateCompanyId() {
     }
 }
 function addMachine(companyId) {
-
-    window.location.href = `machine.html?companyId = ${companyId}`;
+    window.location.href = `machine.html?cid=${companyId}`;
     console.log("Adding machine to company ID:", companyId);
-
 }
 function addUser(companyId) {
 
@@ -110,13 +108,13 @@ async function loadCompanies() {
         // Fetch data from the API
         const response = await fetch("http://64.227.139.217:3000/getAllCompany");
         const data = await response.json();
-        
         // Get the table body element to populate with company data
         const companyTableBody = document.querySelector("#companyTableBody");  // Assuming this is the correct table body element
         
         companyTableBody.innerHTML = ''; // Clear table before reloading
 
         const companies = data.data || []; // Use the data fetched from API
+
 
         if (companies.length === 0) {
             companyTableBody.innerHTML = '<tr><td colspan="4">No companies registered.</td></tr>';
@@ -129,7 +127,7 @@ async function loadCompanies() {
 
             const statusText = company.disabled ? 'Disabled' : 'Active';
             const buttonText = company.disabled ? 'Enable' : 'Disable';
-            const buttonClass = company.disabled ? 'enable-btn' : 'disable-btn';
+            const buttonClass = company.disabled ? 'enable-btn' : 'disable-btn';           
 
             row.innerHTML = `
                 <td>${company.name}</td>

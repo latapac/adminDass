@@ -2,6 +2,9 @@ function loadCompanies() {
     const companyTableBody = document.getElementById('companyTableBody');
     companyTableBody.innerHTML = '';
 
+   
+    
+
     const companies = JSON.parse(localStorage.getItem('companies')) || [];
 
     if (companies.length === 0) {

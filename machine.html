@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
             justify-content: flex-end;
             margin-bottom: 10px;
         }
+
         .add-btn {
             padding: 8px 12px;
             background-color: #007bff;
@@ -18,9 +20,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .add-btn:hover {
             background-color: #0056b3;
         }
+
         table {
             width: 90%;
             margin: 0 auto;
@@ -30,18 +34,23 @@
             border-radius: 10px;
             overflow: hidden;
         }
-        th, td {
+
+        th,
+        td {
             padding: 12px;
             border: 1px solid #ddd;
             text-align: center;
         }
+
         th {
             background-color: #007bff;
             color: white;
         }
+
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
         .action-btn {
             padding: 5px 10px;
             border: none;
@@ -50,18 +59,23 @@
             color: white;
             margin: 2px;
         }
+
         .disable-btn {
             background-color: #dc3545;
         }
+
         .enable-btn {
             background-color: #28a745;
         }
+
         .disable-btn:hover {
             background-color: #b52b3b;
         }
+
         .enable-btn:hover {
             background-color: #218838;
         }
+
         .generate-id-btn {
             padding: 5px 10px;
             background-color: #ffc107;
@@ -69,15 +83,18 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .generate-id-btn:hover {
             background-color: #e0a800;
         }
+
         .input-field {
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
             text-align: center;
         }
+
         .save-btn {
             padding: 5px 10px;
             background-color: #17a2b8;
@@ -86,11 +103,13 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .save-btn:hover {
             background-color: #138496;
         }
     </style>
 </head>
+
 <body>
 
     <div class="top-bar">
@@ -111,116 +130,8 @@
         <tbody id="machineTableBody"></tbody>
     </table>
 
-    <script>
-        function loadMachines() {
-            const machineTableBody = document.getElementById('machineTableBody');
-            machineTableBody.innerHTML = ''; 
-
-            const machines = JSON.parse(localStorage.getItem('machines')) || [];
-
-            if (machines.length === 0) {
-                machineTableBody.innerHTML = '<tr><td colspan="7">No machines registered.</td></tr>';
-                return;
-            }
-
-            machines.forEach((machine, index) => {
-                const row = document.createElement('tr');
-
-                const statusText = machine.disabled ? 'Disabled' : 'Active';
-                const buttonText = machine.disabled ? 'Enable' : 'Disable';
-                const buttonClass = machine.disabled ? 'enable-btn' : 'disable-btn';
-
-                row.innerHTML = `
-                    <td>${machine.serialNo}</td>
-                    <td>${machine.companyId}</td>
-                    <td>${machine.purchaseDate || '-'}</td>
-                    <td>${machine.activationDate || '-'}</td>
-                    <td class="status">${statusText}</td>
-                    <td>
-                        <button class="action-btn ${buttonClass}" onclick="toggleMachineStatus(${index})">${buttonText}</button>
-                    </td>
-                `;
-
-                machineTableBody.appendChild(row);
-            });
-        }
-
-        function addNewMachineRow() {
-    const machineTableBody = document.getElementById('machineTableBody');
-
-    if (document.getElementById('newMachineSerial')) {
-        alert("Finish adding the current machine first.");
-        return;
-    }
-
-    // Get companyId from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const companyId = urlParams.get('companyId') || '';
-
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-        <td><input type="text" id="newMachineSerial" class="input-field" placeholder="Enter Machine Serial No."></td>
-       
-        <td><input type="text" id="companyIdInput" class="input-field" value="${companyId}" readonly></td>
-        <td><input type="date" id="purchaseDate" class="input-field"></td>
-        <td><input type="date" id="activationDate" class="input-field"></td>
-        <td>Active</td>
-        <td><button class="save-btn" onclick="saveNewMachine()">Save</button></td>
-    `;
-
-    machineTableBody.appendChild(newRow);
-}
-
-
-        
-
-       async function saveNewMachine() {
-            const serialNo = document.getElementById('newMachineSerial')?.value.trim();
-            
-            const companyId = document.getElementById('companyIdInput')?.value.trim();
-            const purchaseDate = document.getElementById('purchaseDate')?.value;
-            const activationDate = document.getElementById('activationDate')?.value;
-
-            if (!serialNo || !companyId) {
-                alert("Please enter machine details and generate an ID!");
-                return;
-            }
-            try {
-                
-                const res = await fetch('http://64.227.139.217:3000/addMachine/', {
-                     method: 'POST',
-                     headers: { 'Content-Type': 'application/json' },
-                     body: JSON.stringify({
-                        company_id:companyId,
-                        serial_number:serialNo,
-                        purchase_date:purchaseDate,
-                        activation_date:activationDate,
-                        status:stat,
-                     })
-                 })
-                console.log(res);
-                
-                 
-             } catch (error) {
-                 console.log(error);
-                 
-             }
-            const machines = JSON.parse(localStorage.getItem('machines')) || [];
-            machines.push({ serialNo, companyId, purchaseDate, activationDate, disabled: false });
-            localStorage.setItem('machines', JSON.stringify(machines));
-
-            loadMachines();
-        }
-
-        function toggleMachineStatus(index) {
-            let machines = JSON.parse(localStorage.getItem('machines')) || [];
-            machines[index].disabled = !machines[index].disabled;
-            localStorage.setItem('machines', JSON.stringify(machines));
-            loadMachines();
-        }
-
-        window.onload = loadMachines;
-    </script>
+  <script src="machines.js"></script>
 
 </body>
+
 </html>
