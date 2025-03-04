@@ -70,15 +70,6 @@ async function saveNewCompany() {
         const data = await res.json();
         console.log("Server Response:", data);
 
-        if (res.ok) {
-            alert("Company added successfully!");
-            const companies = JSON.parse(localStorage.getItem('companies')) || [];
-            companies.push({ name, company_id, active: true });
-            localStorage.setItem('companies', JSON.stringify(companies));
-            loadCompanies();
-        } else {
-            alert("Error: " + (data.message || "Something went wrong"));
-        }
     } catch (error) {
         console.error("Fetch error:", error);
         alert("Failed to save company. Please check your connection.");
