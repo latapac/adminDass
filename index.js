@@ -15,12 +15,16 @@ document.querySelector(".companyadd").addEventListener("click", () => {
     setTimeout(loadCompanies, 500)
 
 })
+
 document.querySelector(".machineadd").addEventListener("click", () => {
+    setTimeout(loadMachines, 500)
     window.location.href = `machine.html?companyId=${companyId} `;
     console.log("Adding user to company ID:", companyId);
 })
 
 function loadPage(page) {
+    console.log(page);
+    
     fetch(page)
         .then(response => response.text())
         .then(data => {
@@ -135,7 +139,8 @@ async function loadCompanies() {
                 <td class="status">${statusText}</td>
                 <td>
                     <button class="action-btn ${buttonClass}" onclick="toggleCompanyStatus(${index})">${buttonText}</button>
-                    <button class="action-btn machine-btn" onclick="addMachine('${company.company_id}')">View Machine</button>
+                    <button class="action-btn machine-btn" class="machineadd"
+                     onclick="addMachine('${company.company_id}')">View Machine</button>
                     <button class="action-btn user-btn" style="background-color:grey;" onclick="addUser('${company.company_id}')">Add User</button>
                 </td>
             `;
