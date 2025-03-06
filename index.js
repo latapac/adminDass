@@ -49,13 +49,16 @@ function attachAddCompanyListeners() {
 
 function generateCompanyId() {
     let now = new Date();
-    let id = 'CMP-' + now.getSeconds()
-
+    let id = 'CMP-' + now.getSeconds().toString()
+    id = id.replace(/\s/g, ''); // Remove any spaces
+    console.log(id);
+    
     let companyIdField = document.getElementById('companyId');
     if (companyIdField) {
         companyIdField.value = id;
     }
 }
+
 function addMachine(companyId) {
     window.location.href = `machine.html?cid=${companyId}`;
     console.log("Adding machine to company ID:", companyId);
@@ -136,9 +139,9 @@ async function loadCompanies() {
             row.innerHTML = `
                 <td>${company.name}</td>
                 <td>${company.company_id}</td>
-                <td class="status">${statusText}</td>
+                <td class="status">${statusText?"Active":"Inactive"}</td>
                 <td>
-                    <button class="action-btn ${buttonClass}" onclick="toggleCompanyStatus(${index})">${buttonText}</button>
+                    <button class="action-btn ${buttonClass}" onclick='toggleCompanyStatus("${company.company_id}")'>${buttonText}</button>
                     <button class="action-btn machine-btn" class="machineadd"
                      onclick="addMachine('${company.company_id}')">View Machine</button>
                     <button class="action-btn user-btn" style="background-color:grey;" onclick="addUser('${company.company_id}')">Add User</button>
@@ -184,7 +187,9 @@ function addNewCompanyRow() {
 
 function generateCompanyId() {
     let now = new Date();
-    let id = `CMP - ${now.getFullYear()}${now.getMonth() + 1}${now.getDate()} -${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()} `;
+    let id = `CMP - ${now.getMilliseconds()} `;
+
+    id = id.replace(/\s/g, '');
     document.getElementById('newCompanyId').value = id;
 }
 
@@ -209,10 +214,15 @@ async function saveNewCompany() {
     loadCompanies(); // Refresh table with new company added
 }
 
-function toggleCompanyStatus(index) {
-    let companies = JSON.parse(localStorage.getItem('companies')) || [];
-    companies[index].disabled = !companies[index].disabled;
-    localStorage.setItem('companies', JSON.stringify(companies));
+async function toggleCompanyStatus(cid) {
+     
+   fetch("http://64.227.139.217:3000/changeCompanyStatus/"+cid)
+   .then((res)=>res.json())
+   .then((res)=>console.log(res))
+   .catch((er)=>console.log(er))
+  
+   
+   
     loadCompanies(); // Refresh the table
 }
 

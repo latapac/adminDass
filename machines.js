@@ -40,9 +40,7 @@ async function loadMachines() {
             <td>${machine.purchase_date || '-'}</td>
             <td>${machine.activation_date || '-'}</td>
             <td class="status">${statusText}</td>
-            <td>
-                <button class="action-btn ${buttonClass}" onclick="toggleMachineStatus(${index})">${buttonText}</button>
-            </td>
+           
         `;
 
         machineTableBody.appendChild(row);
